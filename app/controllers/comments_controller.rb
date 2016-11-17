@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   def index
-    @comments = Comment.all
+    @comments = Comment.order(created_at: :asc)
 
     render("comments/index.html.erb")
   end
