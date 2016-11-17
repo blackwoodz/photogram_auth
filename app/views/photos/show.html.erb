@@ -2,30 +2,58 @@
 
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default">
-      <div class="panel-body">
-        <img src="<%= @photo.image %>" alt="" class="img-responsive" />
 
-        <dl class="dl-horizontal">
-          <dt>Caption</dt>
-          <dd><%= @photo.caption %></dd>
-
-          <dt>User</dt>
-          <dd><%= @photo.user_id %></dd>
-
-        </dl>
-
-        <div class="btn-group btn-group-justified">
-          <a href="/photos" class="btn btn-primary">
-            <i class="fa fa-chevron-left"></i>
-          </a>
-          <a href="/photos/<%= @photo.id %>/edit" class="btn btn-warning">
-            <i class="fa fa-edit"></i>
-          </a>
-          <a href="/delete_photo/<%= @photo.id %>" class="btn btn-danger" rel="nofollow">
-            <i class="fa fa-trash-o"></i>
-          </a>
-        </div>
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a href="/users/<%= @photo.user.id %>"><%= @photo.user.username %></a>
+          <small>
+            <%= time_ago_in_words(@photo.created_at) %> ago
+          </small>
+        </h3>
       </div>
+
+      <div class="panel-body">
+        <a href="/photos/<%= @photo.id %>"><img src="<%= @photo.image %>" alt="" class="img-responsive" /></a>
+        <br>
+        <ul class="media-list">
+          <li class="media">
+            <div class="media-body">
+              <h6 class="media-heading">
+                <a href="/users/<%= @photo.user.id %>"><%= @photo.user.username %></a>
+                <small>
+                  <%= time_ago_in_words(@photo.created_at) %> ago
+                </small>
+              </h6>
+              <%= @photo.caption %>
+            </div>
+          </li>
+          <% @photo.comments.each do |comment| %>
+          <li class="media">
+            <div class="media-body">
+              <h6 class="media-heading">
+                <a href="/users/<%= comment.user.id %>"><%= comment.user.username %></a>
+                <small>
+                  <%= time_ago_in_words(comment.user.created_at) %> ago
+                </small>
+              </h6>
+              <%= comment.body %>
+            </div>
+          </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <div class="btn-group btn-group-justified">
+      <a href="/photos" class="btn btn-primary">
+        <i class="fa fa-chevron-left"></i>
+      </a>
+      <a href="/photos/<%= @photo.id %>/edit" class="btn btn-warning">
+        <i class="fa fa-edit"></i>
+      </a>
+      <a href="/delete_photo/<%= @photo.id %>" class="btn btn-danger" rel="nofollow">
+        <i class="fa fa-trash-o"></i>
+      </a>
     </div>
   </div>
 </div>
