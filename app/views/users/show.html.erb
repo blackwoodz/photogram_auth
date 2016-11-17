@@ -1,19 +1,17 @@
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <a href="/photos/new" class="btn btn-default btn-block">
-      <i class="fa fa-plus"></i>
-    </a>
+    <h3><%= @user.username %></h3>
     <hr>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <% @photos.each do |photo| %>
+    <% @user.photos.each do |photo| %>
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a href="/users/<%= photo.user.id %>"><%= photo.user.username %></a>
+          <a href="/users/<%= @user.id %>"><%= @user.username %></a>
           <small>
             <%= time_ago_in_words(photo.created_at) %> ago
           </small>
@@ -26,7 +24,7 @@
           <li class="media">
             <div class="media-body">
               <h6 class="media-heading">
-                <a href="/users/<%= photo.user.id %>"><%= photo.user.username %></a>
+                <a href="/users/<%= @user.id %>"><%= @user.username %></a>
                 <small>
                   <%= time_ago_in_words(photo.created_at) %> ago
                 </small>
