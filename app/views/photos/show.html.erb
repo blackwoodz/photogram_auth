@@ -14,7 +14,35 @@
 
       <div class="panel-body">
         <a href="/photos/<%= @photo.id %>"><img src="<%= @photo.image %>" alt="" class="img-responsive" /></a>
-        <br>
+
+        <% if @is_fan %>
+          <p>
+              <a href="/delete_like/<%= @like_id %>" class="btn btn-link">
+                <i class="fa fa-heart"></i>
+              </a>
+              <%= current_user.username %>
+              likes
+              this
+          </p>
+        <% else %>
+          <p>
+              <form action="/create_like" method="post">
+                <!-- Hidden input for authenticity token to protect from forgery -->
+                <input name="authenticity_token" type="hidden" value="jjQrl2vl/RIOlbzNUp8k0wDPV7s/mR1fttzsDMf5cW1+YX8E7x5tf3dCttNgsRm+o/m2epC2NVoLBMUHkNGnlg==">
+
+                <input type="hidden" name="photo_id" value="<%= @photo.id %>">
+
+                <input type="hidden" name="user_id" value="<%= current_user.id %>">
+
+                <button class="btn btn-link">
+                  <i class="fa fa-heart-o"></i>
+                </button>
+
+                <small class="text-muted">be the first to like this</small>
+              </form>
+          </p>
+        <% end %>
+
         <ul class="media-list">
           <li class="media">
             <div class="media-body">
@@ -40,6 +68,27 @@
             </div>
           </li>
           <% end %>
+          <li class="media">
+            <div class="media-body">
+              <form action="/create_comment" method="post">
+                <!-- Hidden input for authenticity token to protect from forgery -->
+                <input name="authenticity_token" type="hidden" value="ICvLFAdfkUeTdh/oWIudwK1f7PgmxLMZPe6Dr4MXjgvQfp+Hg6QBKuqhFfZqpaCtDmkNOYnrmxyANqqk1D9Y8A==">
+
+                <input type="hidden" name="photo_id" value="<%= @photo.id %>">
+
+                <input type="hidden" name="user_id" value="<%= current_user.id %>">
+
+                <!-- Label and input for body -->
+                <div class="form-group">
+                  <label for="body" class="sr-only">
+                    Body
+                  </label>
+
+                  <input type="text" id="body" name="body" placeholder="Add a comment..." class="form-control" required>
+                </div>
+              </form>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
@@ -48,12 +97,14 @@
       <a href="/photos" class="btn btn-primary">
         <i class="fa fa-chevron-left"></i>
       </a>
-      <a href="/photos/<%= @photo.id %>/edit" class="btn btn-warning">
-        <i class="fa fa-edit"></i>
-      </a>
-      <a href="/delete_photo/<%= @photo.id %>" class="btn btn-danger" rel="nofollow">
-        <i class="fa fa-trash-o"></i>
-      </a>
+      <% if @photo.user.id == current_user.id %>
+        <a href="/photos/<%= @photo.id %>/edit" class="btn btn-warning">
+          <i class="fa fa-edit"></i>
+        </a>
+        <a href="/delete_photo/<%= @photo.id %>" class="btn btn-danger" rel="nofollow">
+          <i class="fa fa-trash-o"></i>
+        </a>
+      <% end %>
     </div>
   </div>
 </div>

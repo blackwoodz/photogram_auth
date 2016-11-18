@@ -7,6 +7,14 @@ class PhotosController < ApplicationController
 
   def show
     @photo = Photo.find(params[:id])
+    @is_fan = false
+
+    @photo.fans.each do |fan|
+      if fan.id == current_user.id
+        @is_fan = true
+        @like_id = Like.where('user_id = ' + current_user.id.to_s + ' AND photo_id = ' + @photo.id.to_s).take.id
+      end
+    end
 
     render("photos/show.html.erb")
   end

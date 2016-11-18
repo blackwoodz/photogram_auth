@@ -27,7 +27,7 @@ class CommentsController < ApplicationController
     save_status = @comment.save
 
     if save_status == true
-      redirect_to("/comments/#{@comment.id}", :notice => "Comment created successfully.")
+      redirect_to :back, :notice => "Comment created successfully."
     else
       render("comments/new.html.erb")
     end
@@ -49,9 +49,9 @@ class CommentsController < ApplicationController
     save_status = @comment.save
 
     if save_status == true
-      redirect_to("/comments/#{@comment.id}", :notice => "Comment updated successfully.")
+      redirect_to :back, :notice => "Comment created successfully."
     else
-      render("comments/edit.html.erb")
+      render("comments/new.html.erb")
     end
   end
 

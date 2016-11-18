@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   # CREATE
   root to: "photos#index"
 
+  get "/my_likes", controller: "users", action: "my_likes"
+
   get "/comments/new", :controller => "comments", :action => "new"
   post "/create_comment", :controller => "comments", :action => "create"
 

@@ -48,10 +48,11 @@
             <i class="fa fa-fw fa-file-photo-o"></i>
             All Posts
           </a></li>
-          <li><a href="/likes">
+          <li><a href="/my_likes">
             <i class="fa fa-fw fa-heart"></i>
             My Likes
           </a></li>
+          <!-- <li><a href="/likes">all likes</a></li> -->
           <% if current_user != nil %>
             <li><a href="/users/<%= current_user.id %>">
               <i class="fa fa-fw fa-user"></i>
@@ -88,7 +89,7 @@
       <% end %>
 
       <% if alert.present? %>
-      <div class="alert alert-dismissable alert-warning">
+      <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <%= alert %>
       </div>
