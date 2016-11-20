@@ -16,6 +16,9 @@ class PhotosController < ApplicationController
       end
     end
 
+    @fans = @photo.fans.pluck(:username)
+    @fan_sentence = @fans.to_sentence(words_connector: ', ', last_word_connector: ' and ')
+
     render("photos/show.html.erb")
   end
 

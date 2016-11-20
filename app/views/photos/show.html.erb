@@ -15,20 +15,15 @@
       <div class="panel-body">
         <a href="/photos/<%= @photo.id %>"><img src="<%= @photo.image %>" alt="" class="img-responsive" /></a>
 
-        <% if @is_fan %>
           <p>
+            <% if @is_fan %>
               <a href="/delete_like/<%= @like_id %>" class="btn btn-link">
                 <i class="fa fa-heart"></i>
               </a>
-              <%= current_user.username %>
-              likes
-              this
-          </p>
-        <% else %>
-          <p>
+            <% else %>
               <form action="/create_like" method="post">
                 <!-- Hidden input for authenticity token to protect from forgery -->
-                <input name="authenticity_token" type="hidden" value="jjQrl2vl/RIOlbzNUp8k0wDPV7s/mR1fttzsDMf5cW1+YX8E7x5tf3dCttNgsRm+o/m2epC2NVoLBMUHkNGnlg==">
+                <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
 
                 <input type="hidden" name="photo_id" value="<%= @photo.id %>">
 
@@ -37,11 +32,23 @@
                 <button class="btn btn-link">
                   <i class="fa fa-heart-o"></i>
                 </button>
-
-                <small class="text-muted">be the first to like this</small>
               </form>
+            <% end %>
+            <% if @fans.count == 0 %>
+              <small class="text-muted">be the first to like this</small>
+            <% else %>
+              <%= @fan_sentence %>
+              <% if @fans.count == 1 %>
+                likes
+              <% else %>
+                like
+              <% end %>
+              this
+            <% end %>
           </p>
-        <% end %>
+          <p>
+
+          </p>
 
         <ul class="media-list">
           <li class="media">
@@ -72,7 +79,7 @@
             <div class="media-body">
               <form action="/create_comment" method="post">
                 <!-- Hidden input for authenticity token to protect from forgery -->
-                <input name="authenticity_token" type="hidden" value="ICvLFAdfkUeTdh/oWIudwK1f7PgmxLMZPe6Dr4MXjgvQfp+Hg6QBKuqhFfZqpaCtDmkNOYnrmxyANqqk1D9Y8A==">
+                <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
 
                 <input type="hidden" name="photo_id" value="<%= @photo.id %>">
 
