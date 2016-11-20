@@ -6,4 +6,13 @@ class Photo < ActiveRecord::Base
   has_many :comments
 
   validates :user_id, presence: true
+
+  def fan_sentence
+    return fan_list.to_sentence(words_connector: ', ', last_word_connector: ' and ')
+  end
+
+  def fan_list
+    return fans.pluck(:username)
+  end
+
 end

@@ -34,8 +34,11 @@ class LikesController < ApplicationController
 
   def edit
     @like = Like.find(params[:id])
-
-    render("likes/edit.html.erb")
+    if @like.photo.user.id != current_user.id
+      redirect_to("/photos/#{@photo.id}", :notice => "You are not authorized to change another user's like for this photo.")
+    else
+      render("likes/edit.html.erb")
+    end
   end
 
   def update
@@ -55,13 +58,16 @@ class LikesController < ApplicationController
 
   def destroy
     @like = Like.find(params[:id])
-
-    @like.destroy
-
-    if URI(request.referer).path == "/likes/#{@like.id}"
-      redirect_to("/", :notice => "Like deleted.")
+    if @like.photo.user.id != current_user.id
+      redirect_to("/photos/#{@photo.id}", :alert => "You are not delete another user's like for this photo.")
     else
-      redirect_to(:back, :notice => "Like deleted.")
+      @like.destroy
+
+      if URI(request.referer).path == "/likes/#{@like.id}"
+        redirect_to("/", :notice => "Like deleted.")
+      else
+        redirect_to(:back, :notice => "Like deleted.")
+      end
     end
   end
 end

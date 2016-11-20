@@ -16,10 +16,17 @@
         <a href="/photos/<%= @photo.id %>"><img src="<%= @photo.image %>" alt="" class="img-responsive" /></a>
 
           <p>
-            <% if @is_fan %>
-              <a href="/delete_like/<%= @like_id %>" class="btn btn-link">
+            <% if @current_user_like_id != nil %>
+              <a href="/delete_like/<%= @current_user_like_id %>" class="btn btn-link">
                 <i class="fa fa-heart"></i>
               </a>
+              <%= @photo.fan_sentence %>
+              <% if @photo.fan_list.count == 1 %>
+                likes
+              <% else %>
+                like
+              <% end %>
+              this
             <% else %>
               <form action="/create_like" method="post">
                 <!-- Hidden input for authenticity token to protect from forgery -->
@@ -32,22 +39,19 @@
                 <button class="btn btn-link">
                   <i class="fa fa-heart-o"></i>
                 </button>
+                <% if @photo.fan_list.count < 1 %>
+                  <small class="text-muted">be the first to like this</small>
+                <% else %>
+                  <%= @photo.fan_sentence %>
+                  <% if @photo.fan_list.count == 1 %>
+                  likes
+                  <% else %>
+                  like
+                  <% end %>
+                  this
+                <% end %>
               </form>
             <% end %>
-            <% if @fans.count == 0 %>
-              <small class="text-muted">be the first to like this</small>
-            <% else %>
-              <%= @fan_sentence %>
-              <% if @fans.count == 1 %>
-                likes
-              <% else %>
-                like
-              <% end %>
-              this
-            <% end %>
-          </p>
-          <p>
-
           </p>
 
         <ul class="media-list">

@@ -1,23 +1,21 @@
 class PhotosController < ApplicationController
   def index
     @photos = Photo.order(created_at: :desc)
-
+    @like_ids = Hash.new
+    @photos.each do |photo|
+      if photo.fan_list.include?(current_user.username)
+        @like_ids[photo.id] = Like.where('user_id = ' + current_user.id.to_s + ' AND photo_id = ' + photo.id.to_s).take.id
+      end
+    end
     render("photos/index.html.erb")
   end
 
   def show
     @photo = Photo.find(params[:id])
-    @is_fan = false
 
-    @photo.fans.each do |fan|
-      if fan.id == current_user.id
-        @is_fan = true
-        @like_id = Like.where('user_id = ' + current_user.id.to_s + ' AND photo_id = ' + @photo.id.to_s).take.id
-      end
+    if @photo.fan_list.include?(current_user.username)
+      @current_user_like_id = Like.where('user_id = ' + current_user.id.to_s + ' AND photo_id = ' + @photo.id.to_s).take.id
     end
-
-    @fans = @photo.fans.pluck(:username)
-    @fan_sentence = @fans.to_sentence(words_connector: ', ', last_word_connector: ' and ')
 
     render("photos/show.html.erb")
   end
@@ -46,8 +44,11 @@ class PhotosController < ApplicationController
 
   def edit
     @photo = Photo.find(params[:id])
-
-    render("photos/edit.html.erb")
+    if @photo.user.id != current_user.id
+      redirect_to("/photos/#{@photo.id}", :alert => "You are not authorized to edit this photo.")
+    else
+      render("photos/edit.html.erb")
+    end
   end
 
   def update
@@ -68,13 +69,16 @@ class PhotosController < ApplicationController
 
   def destroy
     @photo = Photo.find(params[:id])
-
-    @photo.destroy
-
-    if URI(request.referer).path == "/photos/#{@photo.id}"
-      redirect_to("/", :notice => "Photo deleted.")
+    if @photo.user.id != current_user.id
+      redirect_to("/photos/#{@photo.id}", :notice => "You are not authorized to delete this photo.")
     else
-      redirect_to(:back, :notice => "Photo deleted.")
+      @photo.destroy
+
+      if URI(request.referer).path == "/photos/#{@photo.id}"
+        redirect_to("/", :notice => "Photo deleted.")
+      else
+        redirect_to(:back, :notice => "Photo deleted.")
+      end
     end
   end
 end
