@@ -9,4 +9,8 @@ class UsersController < ApplicationController
 
   def my_likes
   end
+
+  def my_timeline
+    @timeline_photos = current_user.timeline_photos.order("created_at DESC")
+  end
 end

@@ -59,7 +59,7 @@ class LikesController < ApplicationController
   def destroy
     @like = Like.find(params[:id])
     if @like.photo.user.id != current_user.id
-      redirect_to("/photos/#{@photo.id}", :alert => "You are not delete another user's like for this photo.")
+      redirect_to("/photos/#{@photo.id}", :alert => "You cannot delete another user's like for this photo.")
     else
       @like.destroy
 

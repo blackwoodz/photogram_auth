@@ -1,12 +1,31 @@
 Rails.application.routes.draw do
+  root to: "photos#index"
+  # Routes for the Friend_request resource:
+  # CREATE
+  get "/friend_requests/new", :controller => "friend_requests", :action => "new"
+  post "/create_friend_request", :controller => "friend_requests", :action => "create"
+
+  # READ
+  get "/friend_requests", :controller => "friend_requests", :action => "index"
+  get "/friend_requests/:id", :controller => "friend_requests", :action => "show"
+
+  # UPDATE
+  get "/friend_requests/:id/edit", :controller => "friend_requests", :action => "edit"
+  post "/update_friend_request/:id", :controller => "friend_requests", :action => "update"
+
+  # DELETE
+  get "/delete_friend_request/:id", :controller => "friend_requests", :action => "destroy"
+  #------------------------------
+
   get 'users', :controller => "users", :action => "index"
 
 
   # Routes for the Comment resource:
   # CREATE
-  root to: "photos#index"
 
   get "/my_likes", controller: "users", action: "my_likes"
+
+  get "/my_timeline", controller: "users", action: "my_timeline"
 
   get "/comments/new", :controller => "comments", :action => "new"
   post "/create_comment", :controller => "comments", :action => "create"

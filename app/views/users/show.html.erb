@@ -1,9 +1,54 @@
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <h3><%= @user.username %></h3>
-    <hr>
+    <div class="jumbotron">
+      <h3>
+        <%= @user.username %>
+      </h3>
+
+      <div class="row">
+        <div class="col-md-3">
+          <% if current_user.friends_where_sender.pluck(:id).include?(@user.id) %>
+          <a href="/delete_friend_request/<%= current_user.friend_requests_where_sender.where('sender_id = ' + current_user.id.to_s + ' AND receiver_id = ' + @user.id.to_s).take.id  %>" class="btn btn-success btn-block">
+            Following
+          </a>
+          <% else %>
+          <form action="/create_friend_request" method="post">
+            <!-- Hidden input for authenticity token to protect from forgery -->
+            <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+            <input type="hidden" id="sender_id" name="sender_id" value="<%= current_user.id %>">
+
+            <input type="hidden" id="receiver_id" name="receiver_id" value="<%= @user.id %>">
+
+            <button class="btn btn-default btn-block">
+              Follow
+            </button>
+          </form>
+          <% end %>
+        </div>
+
+        <div class="col-md-3">
+          <p class="lead">
+            <%= @user.photos.count %> posts
+          </p>
+        </div>
+
+        <div class="col-md-3">
+          <p class="lead">
+            <%= @user.friends_where_receiver.count %> followers
+          </p>
+        </div>
+
+        <div class="col-md-3">
+          <p class="lead">
+            <%= @user.friends_where_sender.count %> following
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
